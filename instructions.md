@@ -27,9 +27,12 @@
 
 ## 2.1. Get the installer
 
-1. Download the [**Generic Linux Installer**](https://www.st.com/en/development-tools/stm32cubeclt.html), instead of the Debian based one
+1. Download the [**Generic Linux Installer**](
+https://www.st.com/en/development-tools/stm32cubeclt.html), instead of the
+Debian based one
    - It requires an account at ST
-2. Go to the **Windows explorer** under **Downloads**, where the downloaded `.zip` is located
+2. Go to the **Windows explorer** under **Downloads**, where the downloaded
+`.zip` is located
 3. Copy the Windows path from the file explorer
    - E.g. `C:\Users\<user>\Downloads`
 4. Open your WSL Ubuntu instance
@@ -54,7 +57,8 @@
 1. Run the `.sh` installer using `sudo`
    - `sudo sh <filename>.sh`
 2. Accept the prompt with `y`
-3. Accept location installation with `<Enter>`, which default to something similar to:
+3. Accept location installation with `<Enter>`, which default to something
+similar to:
    - `/opt/st/stm32cubeclt_<version`
 
 <div align="right">
@@ -63,9 +67,11 @@
 
 ## 2.3. Make the Command Line Tools available
 
-The installation will also add a script to `/etc/profile.d/` similar to `cubeclt-bin-path_<version>.sh` which will extend your `PATH`.
+The installation will also add a script to `/etc/profile.d/` similar to
+`cubeclt-bin-path_<version>.sh` which will extend your `PATH`.
 
-You do thereby have to open a new terminal for these to load in, or you source it yourself e.g.:\
+You do thereby have to open a new terminal for these to load in, or you source
+it yourself e.g.:\
 `. /etc/profile.d/cubeclt-bin-path_1.16.0.sh`
 
 <div align="right">
@@ -76,10 +82,14 @@ You do thereby have to open a new terminal for these to load in, or you source i
 
 ### 2.4.1. Find out missing packages
 
-* Check the [**Release Note at the download page**](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads), under **Installing on Linux** which describes the missing packages as well as you needing the correct python version.
+- Check the [**Release Note at the download page**](
+https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads), under
+**Installing on Linux** which describes the missing packages as well as you
+needing the correct python version.
 
-* You can use the `ldd <executable>` command to see dependencies\
-| *prints the shared objects (shared libraries) required by each program or shared object*
+- You can use the `ldd <executable>` command to see dependencies\
+| *prints the shared objects (shared libraries) required by each program or
+shared object*
 
 Find out missing packages for `gdb` installed with STM32CubeCLT.
 
@@ -112,7 +122,8 @@ arm-none-eabi-gdb: error while loading shared libraries: libncurses.so.5: cannot
 
 `libncurses.so.5` depends on `libtinfo.so.5`, which is why we start installing `libtinfo`.
 
-These are not even available in the `apt` `universe` repository for newer Ubuntu versions. Which is why we install them through the Ubuntu archive.
+These are not even available in the `apt` `universe` repository for newer Ubuntu
+versions. Which is why we install them through the Ubuntu archive.
 
 <div align="right">
   <a href="#table-of-contents">Back to TOC</a>
@@ -142,7 +153,6 @@ sudo dpkg -i ./libtinfo5_6.4-2_amd64.deb
 ---
 
 #### 2.4.2.2. `libncurses.so.5` - Install package `libncurses5`
-
 
 Download the `.deb` file:
 
