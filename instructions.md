@@ -18,6 +18,10 @@
       - [2.4.2.2. `libncurses.so.5` - Install package `libncurses5`](#2422-libncursesso5---install-package-libncurses5)
       - [2.4.2.3. Verify the recognition of the new packages](#2423-verify-the-recognition-of-the-new-packages)
   - [2.5. Verify that `arm-none-eabi-gdb` is executable](#25-verify-that-arm-none-eabi-gdb-is-executable)
+- [Install STM32CubeMX - Initialization Code Generator](#install-stm32cubemx---initialization-code-generator)
+  - [Choose operating system](#choose-operating-system)
+  - [Windows installation](#windows-installation)
+  - [Linux installation](#linux-installation)
 
 # 1. Pre-requisites
 
@@ -215,3 +219,38 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 ```
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+# Install STM32CubeMX - Initialization Code Generator
+
+## Choose operating system
+
+From testing both an install on Windows as well as on an Ubuntu WSL2 instance,
+I would recommend the Windows installation to avoid issues. This is a GUI based
+tool and thereby works the best on Windows as that is the host system.
+
+It works great with generating code within the WSL2 Ubuntu instance.
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+## Windows installation
+
+1. Download the [**Windows Installer**](
+https://www.st.com/en/development-tools/stm32cubeclt.html)
+   - It requires an account at ST
+2. Unzip the `.zip` in Windows
+3. Execute the `.exe` file
+4. Follow the installation instructions
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+## Linux installation
+
+[Upcoming link to markdown file with instructions](.)
