@@ -45,6 +45,10 @@
    - `cd ~`
    - `unzip <file>`
 
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
 ## 2.2. Run the installer
 
 1. Run the `.sh` installer using `sudo`
@@ -53,12 +57,20 @@
 3. Accept location installation with `<Enter>`, which default to something similar to:
    - `/opt/st/stm32cubeclt_<version`
 
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
 ## 2.3. Make the Command Line Tools available
 
 The installation will also add a script to `/etc/profile.d/` similar to `cubeclt-bin-path_<version>.sh` which will extend your `PATH`.
 
 You do thereby have to open a new terminal for these to load in, or you source it yourself e.g.:\
 `. /etc/profile.d/cubeclt-bin-path_1.16.0.sh`
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
 
 ## 2.4. Missing packages
 
@@ -92,11 +104,19 @@ With e.g. the output:
 arm-none-eabi-gdb: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
 ```
 
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
 ### 2.4.2. Install missing packages
 
 `libncurses.so.5` depends on `libtinfo.so.5`, which is why we start installing `libtinfo`.
 
 These are not even available in the `apt` `universe` repository for newer Ubuntu versions. Which is why we install them through the Ubuntu archive.
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
 
 ---
 
@@ -115,9 +135,14 @@ Install using the file:
 sudo dpkg -i ./libtinfo5_6.4-2_amd64.deb
 ```
 
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
 ---
 
 #### 2.4.2.2. `libncurses.so.5` - Install package `libncurses5`
+
 
 Download the `.deb` file:
 
@@ -131,6 +156,10 @@ Install using the file:
 ```shell
 sudo dpkg -i ./libncurses5_6.4-2_amd64.deb
 ```
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
 
 ---
 
@@ -156,6 +185,10 @@ Which outputs something similar to:
 ```
 
 Indicating that both `libncurses.so.5` and `libtinfo.so.5` are found.
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
 
 ## 2.5. Verify that `arm-none-eabi-gdb` is executable
 
