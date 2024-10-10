@@ -6,6 +6,7 @@
 <!-- omit in toc -->
 # Table of contents
 
+- [Pre-requisites](#pre-requisites)
 - [1. Install STM32CubeCLT - Command Line Tool](#1-install-stm32cubeclt---command-line-tool)
   - [1.1. Get the installer](#11-get-the-installer)
   - [1.2. Run the installer](#12-run-the-installer)
@@ -17,6 +18,10 @@
       - [1.4.2.2. `libncurses.so.5` - Install package `libncurses5`](#1422-libncursesso5---install-package-libncurses5)
       - [1.4.2.3. Verify the recognition of the new packages](#1423-verify-the-recognition-of-the-new-packages)
   - [1.5. Verify that `arm-none-eabi-gdb` is executable](#15-verify-that-arm-none-eabi-gdb-is-executable)
+
+# Pre-requisites
+
+- WSL2 installed with an Ubuntu instance
 
 # 1. Install STM32CubeCLT - Command Line Tool
 
