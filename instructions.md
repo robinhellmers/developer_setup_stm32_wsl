@@ -6,26 +6,26 @@
 <!-- omit in toc -->
 # Table of contents
 
-- [Pre-requisites](#pre-requisites)
-- [1. Install STM32CubeCLT - Command Line Tool](#1-install-stm32cubeclt---command-line-tool)
-  - [1.1. Get the installer](#11-get-the-installer)
-  - [1.2. Run the installer](#12-run-the-installer)
-  - [1.3. Make the Command Line Tools available](#13-make-the-command-line-tools-available)
-  - [1.4. Missing packages](#14-missing-packages)
-    - [1.4.1. Find out missing packages](#141-find-out-missing-packages)
-    - [1.4.2. Install missing packages](#142-install-missing-packages)
-      - [1.4.2.1. `libtinfo.so.5` - Install package `libtinfo5`](#1421-libtinfoso5---install-package-libtinfo5)
-      - [1.4.2.2. `libncurses.so.5` - Install package `libncurses5`](#1422-libncursesso5---install-package-libncurses5)
-      - [1.4.2.3. Verify the recognition of the new packages](#1423-verify-the-recognition-of-the-new-packages)
-  - [1.5. Verify that `arm-none-eabi-gdb` is executable](#15-verify-that-arm-none-eabi-gdb-is-executable)
+- [1. Pre-requisites](#1-pre-requisites)
+- [2. Install STM32CubeCLT - Command Line Tool](#2-install-stm32cubeclt---command-line-tool)
+  - [2.1. Get the installer](#21-get-the-installer)
+  - [2.2. Run the installer](#22-run-the-installer)
+  - [2.3. Make the Command Line Tools available](#23-make-the-command-line-tools-available)
+  - [2.4. Missing packages](#24-missing-packages)
+    - [2.4.1. Find out missing packages](#241-find-out-missing-packages)
+    - [2.4.2. Install missing packages](#242-install-missing-packages)
+      - [2.4.2.1. `libtinfo.so.5` - Install package `libtinfo5`](#2421-libtinfoso5---install-package-libtinfo5)
+      - [2.4.2.2. `libncurses.so.5` - Install package `libncurses5`](#2422-libncursesso5---install-package-libncurses5)
+      - [2.4.2.3. Verify the recognition of the new packages](#2423-verify-the-recognition-of-the-new-packages)
+  - [2.5. Verify that `arm-none-eabi-gdb` is executable](#25-verify-that-arm-none-eabi-gdb-is-executable)
 
-# Pre-requisites
+# 1. Pre-requisites
 
 - WSL2 installed with an Ubuntu instance
 
-# 1. Install STM32CubeCLT - Command Line Tool
+# 2. Install STM32CubeCLT - Command Line Tool
 
-## 1.1. Get the installer
+## 2.1. Get the installer
 
 1. Download the [**Generic Linux Installer**](https://www.st.com/en/development-tools/stm32cubeclt.html), instead of the Debian based one
    - It requires an account at ST
@@ -45,7 +45,7 @@
    - `cd ~`
    - `unzip <file>`
 
-## 1.2. Run the installer
+## 2.2. Run the installer
 
 1. Run the `.sh` installer using `sudo`
    - `sudo sh <filename>.sh`
@@ -53,16 +53,16 @@
 3. Accept location installation with `<Enter>`, which default to something similar to:
    - `/opt/st/stm32cubeclt_<version`
 
-## 1.3. Make the Command Line Tools available
+## 2.3. Make the Command Line Tools available
 
 The installation will also add a script to `/etc/profile.d/` similar to `cubeclt-bin-path_<version>.sh` which will extend your `PATH`.
 
 You do thereby have to open a new terminal for these to load in, or you source it yourself e.g.:\
 `. /etc/profile.d/cubeclt-bin-path_1.16.0.sh`
 
-## 1.4. Missing packages
+## 2.4. Missing packages
 
-### 1.4.1. Find out missing packages
+### 2.4.1. Find out missing packages
 
 * Check the [**Release Note at the download page**](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads), under **Installing on Linux** which describes the missing packages as well as you needing the correct python version.
 
@@ -92,7 +92,7 @@ With e.g. the output:
 arm-none-eabi-gdb: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
 ```
 
-### 1.4.2. Install missing packages
+### 2.4.2. Install missing packages
 
 `libncurses.so.5` depends on `libtinfo.so.5`, which is why we start installing `libtinfo`.
 
@@ -100,7 +100,7 @@ These are not even available in the `apt` `universe` repository for newer Ubuntu
 
 ---
 
-#### 1.4.2.1. `libtinfo.so.5` - Install package `libtinfo5`
+#### 2.4.2.1. `libtinfo.so.5` - Install package `libtinfo5`
 
 Download the `.deb` file:
 
@@ -117,7 +117,7 @@ sudo dpkg -i ./libtinfo5_6.4-2_amd64.deb
 
 ---
 
-#### 1.4.2.2. `libncurses.so.5` - Install package `libncurses5`
+#### 2.4.2.2. `libncurses.so.5` - Install package `libncurses5`
 
 Download the `.deb` file:
 
@@ -134,7 +134,7 @@ sudo dpkg -i ./libncurses5_6.4-2_amd64.deb
 
 ---
 
-#### 1.4.2.3. Verify the recognition of the new packages
+#### 2.4.2.3. Verify the recognition of the new packages
 
 ```shell
 ldd "$(which arm-none-eabi-gdb)"
@@ -157,7 +157,7 @@ Which outputs something similar to:
 
 Indicating that both `libncurses.so.5` and `libtinfo.so.5` are found.
 
-## 1.5. Verify that `arm-none-eabi-gdb` is executable
+## 2.5. Verify that `arm-none-eabi-gdb` is executable
 
 ```shell
 arm-none-eabi-gdb --version
