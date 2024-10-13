@@ -22,6 +22,7 @@
   - [3.1. Choose operating system](#31-choose-operating-system)
   - [3.2. Windows installation](#32-windows-installation)
   - [3.3. Linux installation](#33-linux-installation)
+- [4. Initialize a project - STM32CubeMX](#4-initialize-a-project---stm32cubemx)
 
 # 1. Pre-requisites
 
@@ -254,3 +255,103 @@ https://www.st.com/en/development-tools/stm32cubeclt.html)
 ## 3.3. Linux installation
 
 [Upcoming link to markdown file with instructions](.)
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+# 4. Initialize a project - STM32CubeMX
+
+Create a project which builds with Makefile. It shall be created to
+demonstrate a **Intellisense** setup for C/C++ with Makefile.
+
+1. Start **STM32CubeMX** on Windows.
+2. Click **Start My project from ST Board**
+    - Wait while it downloads information
+
+    <p align="center">
+        <img
+            src="https://github.com/user-attachments/assets/4dcfb8a0-be67-4b1a-b00b-84536c3d5781"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="40%"
+        />
+    </p>
+
+3. Under **Commercial Part Number**, search for `P-NUCLEO-WB55-NUCLEO`
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/6b4c6cab-2918-4130-9694-36256d96640b"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="40%"
+        />
+    </p>
+
+4. Double-click the found board with the same commercial part number
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/bdb0c5aa-162a-4997-9be3-c909921bccb6"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="40%"
+        />
+    </p>
+
+5. In the **Board Project Options** popup window, select
+   `Generate demonstration code` and then click **OK**
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/d1ab84c0-7077-44f8-917b-92716a814984"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="40%"
+        />
+    </p>
+
+6. Click the **Project Manager** tab.
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/cabecb64-4bd7-4d1e-816c-e7070a209637"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="90%"
+        />
+    </p>
+
+7. Enter the fields:
+    - `Project Name`
+        - Which will be the directory name as well. Avoid spaces as it is in the
+linux space
+    - `Project Location`
+        - Reach the WSL2 Ubuntu instance throuch `\\wsl.localhost\<wsl_instance>\`
+        - Can e.g. be reached through the Windows Explorer
+        - Find WSL instance name by opening **CMD** and listing all instances
+`wsl --list`
+        - Example location: `\\wsl.localhost\Ubuntu-24.04-6\home\hellmers\git\project`
+    - `Application Structure`
+        - Not as important, choose `Advanced`
+    - `Toolchain Folder Location`
+        - Automatically filled using `Project Location` and `Project Name`
+    - `Toolchain / IDE`
+        - Select `Makefile` as this guide showcases this
+        - Could as well have been `CMake`
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/ab2805f3-18e7-4f83-bf57-28bc383e4e3a"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="90%"
+        />
+    </p>
+
+8. Click the **GENERATE CODE** button, top right above the tabs
+    - Wait a little while for the code to generate
+
+    <p align="center">
+        <img src="https://github.com/user-attachments/assets/12ceb8e2-266f-4efa-8582-65a900689824"
+            alt="ACCESS TO BOARD SELECTOR button in CubeMX GUI"
+            width="30%"
+        />
+    </p>
+
+9. Open the WSL2 Ubuntu instance and go to the project location
+10. Install `make` with `apt`
+    - `sudo apt install make`
+11. While in the project directory, where the generated `Makefile` is, compile everything:
+    - `make`
+    - Just to make sure there are no issues
