@@ -23,10 +23,19 @@
   - [3.2. Windows installation](#32-windows-installation)
   - [3.3. Linux installation](#33-linux-installation)
 - [4. Initialize a project - STM32CubeMX](#4-initialize-a-project---stm32cubemx)
+- [5. Setup Visual Studio Code](#5-setup-visual-studio-code)
+  - [5.1. Install extensions](#51-install-extensions)
+    - [5.1.1. C/C++ extension](#511-cc-extension)
+    - [5.1.2. Build system extension](#512-build-system-extension)
+  - [5.2. Extensions configurations](#52-extensions-configurations)
+    - [5.2.1. C/C++](#521-cc)
+    - [5.2.2. Makefile Tools](#522-makefile-tools)
 
 # 1. Pre-requisites
 
 - WSL2 installed with an Ubuntu instance
+- Visual Studio Code (VSCode) installed
+- VSCode 'Remote Development' extension installed for access to the WSL instance
 
 # 2. Install STM32CubeCLT - Command Line Tool
 
@@ -355,3 +364,153 @@ linux space
 11. While in the project directory, where the generated `Makefile` is, compile everything:
     - `make`
     - Just to make sure there are no issues
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+# 5. Setup Visual Studio Code
+
+## 5.1. Install extensions
+
+Install the Visual Studio Code (VSCode) extensions e.g. through the GUI
+Extensions tab.
+
+### 5.1.1. C/C++ extension
+
+Install the extension:
+
+- C/C++ extension
+  - ID: `ms-vscode.cpptools`
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+### 5.1.2. Build system extension
+
+The build system extension of course depends on which build system you have
+chosen to use when e.g. generating a project with STM32CubeMX.
+
+Example build systems:
+
+- Makefile
+- CMake
+
+This guide specifically used Makefile.
+
+Install your corresponding extension:
+
+- Makefile Tools
+  - ID: `ms-vscode.makefile-tools`
+- CMake Tools
+  - ID: `ms-vscode.cmake-tools`
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+## 5.2. Extensions configurations
+
+Open VSCode at the project root using `code .` if you are in the project root.
+
+### 5.2.1. C/C++
+
+1. Open the `Command Palette`:
+    - Press `Ctrl` + `Shift` + `P`
+2. Enter `C/C++: Edit Configurations (UI)`
+    - Creates a configuration file at the project directory `.vscode/c_cpp_properties.json`
+    - Presents configuration options
+3. Configure the following fields:
+    1. `Compiler path`
+        1. Check the drop-down list if it presents you with the full path to `arm-none-eabi-gcc`
+        2. If not, open the Ubuntu instance and check the path with
+            - `which arm-none-eabi-gcc`
+    2. `IntelliSense mode`
+        - Select `linux-gcc-arm`
+    3. `Include path`
+        - Should already have `${workspaceFolder}/**`
+4. At the bottom, expand the **Advanced Settings** drop-down
+5. Configure the following fields:
+    1. `Configuration provider`j
+        - Tells which build system that is used and which extension to integrate
+with
+        - For Makefile: `ms-vscode.makefile-tools`
+        - Extension ID can be found by:
+            1. Open **Extensions** by pressing `Ctrl` + `Shift` + `X`
+            2. Click the cogwheel to the right of your build system extension
+                - E.g. `Makefile Tools`
+            3. Click **Copy Extension ID**
+
+---
+
+This results in a similar  `.vscode/c_cpp_properties.json`:
+
+```json
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/opt/st/stm32cubeclt_1.16.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-arm",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
+```
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+### 5.2.2. Makefile Tools
+
+For **IntelliSense** to work properly, it needs to read the commands executed
+when running make. To do this, it runs something similar to `make clean`
+followed by `make --dry-run`, basically not executing the commands but printing
+out the commands to be executed. That output is put into a temporary file, which
+then is read and used for IntelliSense.
+
+First, try with just:
+
+1. Open the `Command Palette`:
+    - Press `Ctrl` + `Shift` + `P`
+2. Enter `Makefile: Configure`
+
+---
+
+If the output in the `Makefile tools` terminal or `.vscode/extension.log` shows
+failed execution, you can do it manually:
+
+1. Open the `Command Palette`:
+    - Press `Ctrl` + `Shift` + `P`
+2. Enter `Makefile: Open Build Log Setting`
+3. Configure the following field:
+    - `Build Log`
+        - Enter `./dryrun.log`
+4. Generate `dryrun.log`
+    1. Open the project location
+    2. Clean up any previous build
+        - `make clean`
+    3. Generate the log:
+        - `make --dry-run > dryrun.log`
+5. Reload the window
+6. Potentially run the same as previous:
+    - `Makefile: Configure`
+
+---
+
+This results in the following setting in `.vscode/settings.json`:
+
+```json
+{
+    "makefile.buildLog": "./dryrun.log"
+}
+```
