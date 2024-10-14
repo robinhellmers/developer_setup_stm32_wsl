@@ -3,6 +3,8 @@
 <!-- omit in toc -->
 # Setup for STM32 development on Windows with WSL2
 
+Created by [**Robin Hellmers**](https://github.com/robinhellmers), published on [Github](https://github.com/robinhellmers/developer_setup_stm32_wsl)
+
 <!-- omit in toc -->
 # Table of contents
 
