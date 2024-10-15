@@ -27,11 +27,12 @@ Created by [**Robin Hellmers**](https://github.com/robinhellmers), published on 
 - [4. Initialize a project - STM32CubeMX](#4-initialize-a-project---stm32cubemx)
 - [5. Setup Visual Studio Code](#5-setup-visual-studio-code)
   - [5.1. Install extensions](#51-install-extensions)
-    - [5.1.1. C/C++ extension](#511-cc-extension)
+    - [5.1.1. Main extensions](#511-main-extensions)
     - [5.1.2. Build system extension](#512-build-system-extension)
   - [5.2. Extensions configurations](#52-extensions-configurations)
     - [5.2.1. C/C++](#521-cc)
     - [5.2.2. Makefile Tools](#522-makefile-tools)
+- [Extra notes](#extra-notes)
 
 # 1. Pre-requisites
 
@@ -378,12 +379,14 @@ linux space
 Install the Visual Studio Code (VSCode) extensions e.g. through the GUI
 Extensions tab.
 
-### 5.1.1. C/C++ extension
+### 5.1.1. Main extensions
 
-Install the extension:
+Install the extensions:
 
 - C/C++ extension
   - ID: `ms-vscode.cpptools`
+- STM32 VS Code Extension
+  - ID: `STMicroelectronics.stm32-vscode-extension`
 
 <div align="right">
   <a href="#table-of-contents">Back to TOC</a>
@@ -515,4 +518,153 @@ This results in the following setting in `.vscode/settings.json`:
 {
     "makefile.buildLog": "./dryrun.log"
 }
+```
+
+# Extra notes
+
+Installing STM32 Extension and running `Upgrade ST Link firmware` in the extension tab results in:
+
+```java
+[out] Exception in thread "main" java.lang.UnsatisfiedLinkError: /opt/st/stm32cubeclt_1.16.0/STLink-gdb-server/bin/native/linux_x64/libSTLinkUSBDriver.so: libusb-1.0.so.0: cannot open shared object file: No such file or directory
+    at java.base/jdk.internal.loader.NativeLibraries.load(Native Method)
+    at java.base/jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open(NativeLibraries.java:388)
+    at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:232)
+    at java.base/jdk.internal.loader.NativeLibraries.loadLibrary(NativeLibraries.java:174)
+    at java.base/java.lang.ClassLoader.loadLibrary(ClassLoader.java:2394)
+    at java.base/java.lang.Runtime.load0(Runtime.java:755)
+    at java.base/java.lang.System.load(System.java:1957)
+    at com.st.stlinkinterface.e.a(SourceFile:131)
+    at com.st.stlinkupgrade.app.b.a(SourceFile:63)
+    at com.st.stlinkupgrade.app.MainApp.main(SourceFile:16)
+```
+
+Seems like library is missing.
+
+```shell
+sudo apt install -y libusb-1.0-0-dev
+```
+
+Resolved the issue.
+
+Now we get
+
+```
+[warn] No ST-Link detected
+```
+
+We need to bind the ST-Link.
+
+1. Open CMD (as admin?)
+2. `usbipd list`
+3. `usbipd bind --busid 18-2`
+4. `usbipd attach --wsl --busid 18-2`
+
+Results in
+
+```text
+usbipd: error: Mounting 'C:\Program Files\usbipd-win\WSL' within WSL failed.
+```
+
+[Resolve issue](https://github.com/dorssel/usbipd-win/issues/856#issuecomment-1931040456) with the following command:
+
+```shell
+sudo mount -t drvfs -o "ro,umask=222" "C:\Program Files\usbipd-win\WSL" "/var/run/usbipd-win"
+```
+
+Did not solve it alone.
+
+I opened Powershell and also specified the WSL distro
+
+```powershell
+usbipd attach --wsl "Ubuntu-24.04-6" --busid 18-2
+```
+
+Which worked:
+
+```text
+usbipd: info: Selecting a specific distribution is no longer required. Please file an issue if you believe that the default selection mechanism is not working for you.
+usbipd: info: Using WSL distribution 'Ubuntu-24.04-6' to attach; the device will be available in all WSL 2 distributions.
+usbipd: info: Using IP address 172.25.96.1 to reach the host.
+```
+
+Open the Ubuntu instance to look for USB devices
+
+```shell
+sudo apt install usbutils
+```
+
+List all USB devices:
+
+```shell
+lsusb
+```
+
+Results in:
+
+```text
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 0483:374b STMicroelectronics ST-LINK/V2.1
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+```
+
+Meaning we found the ST-LINK!
+
+Lets try Upgrading the ST Link firmware again
+
+```text
+[warn] No ST-Link detected
+[out] libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/002, errno=13
+libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
+libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/002, errno=13
+libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
+libusb: error [get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/002, errno=13
+libusb: error [get_usbfs_fd] libusb requires write access to USB device nodes
+Access to ST-Link was denied by the system. Ensure it is not already in use, and that you have enough rights.
+```
+
+Have to add udev rules for ST-Link which is shipped with ST-Link.
+
+<!-- 
+Install WSL tools like `wslview`
+
+```shell
+sudo add-apt-repository ppa:wslutilities/wslu
+sudo apt update
+sudo apt upgrade
+sudo apt install wslu -y
+```
+
+```shell
+cd /opt/st/stm32cubeclt_1.16.0/STLink-gdb-server
+wslview ./about.html
+```
+ -->
+
+After checking it, it seems like the udev rules are just placed at another
+location than what I checked.
+
+See the script
+
+```shell
+/opt/st/stm32cubeclt_1.16.0st-stlink-udev-rules.uninstall.sh
+```
+
+```shell
+#!/bin/bash
+
+set -e
+rm -f /etc/udev/rules.d/{49-stlinkv1.rules,49-stlinkv2-1.rules,49-stlinkv2.rules,49-stlinkv3.rules}
+```
+
+Meaning that the udev rules are installed at
+
+```shell
+/etc/udev/rules.d/
+```
+
+Which is the correct placement. Rather than the placement of system package
+provided rules, which can be overwritten by e.g. updates
+
+```shell
+/lib/udev/rules.d/
 ```
