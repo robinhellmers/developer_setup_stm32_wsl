@@ -522,7 +522,8 @@ This results in the following setting in `.vscode/settings.json`:
 
 # Extra notes
 
-Installing STM32 Extension and running `Upgrade ST Link firmware` in the extension tab results in:
+Installing STM32 Extension and running `Upgrade ST Link firmware` in the
+extension tab results in:
 
 ```java
 [out] Exception in thread "main" java.lang.UnsatisfiedLinkError: /opt/st/stm32cubeclt_1.16.0/STLink-gdb-server/bin/native/linux_x64/libSTLinkUSBDriver.so: libusb-1.0.so.0: cannot open shared object file: No such file or directory
@@ -548,7 +549,7 @@ Resolved the issue.
 
 Now we get
 
-```
+```text
 [warn] No ST-Link detected
 ```
 
@@ -565,7 +566,9 @@ Results in
 usbipd: error: Mounting 'C:\Program Files\usbipd-win\WSL' within WSL failed.
 ```
 
-[Resolve issue](https://github.com/dorssel/usbipd-win/issues/856#issuecomment-1931040456) with the following command:
+[Resolve issue](
+https://github.com/dorssel/usbipd-win/issues856#issuecomment-1931040456)
+with the following command:
 
 ```shell
 sudo mount -t drvfs -o "ro,umask=222" "C:\Program Files\usbipd-win\WSL" "/var/run/usbipd-win"
