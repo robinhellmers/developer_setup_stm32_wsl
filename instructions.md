@@ -33,6 +33,8 @@ Created by [**Robin Hellmers**](https://github.com/robinhellmers), published on 
     - [5.2.1. C/C++](#521-cc)
     - [5.2.2. Makefile Tools](#522-makefile-tools)
 - [Extra notes](#extra-notes)
+  - [USB Connection \& Upgrade ST Link firmware](#usb-connection--upgrade-st-link-firmware)
+  - [Debug setup - `launch.json`](#debug-setup---launchjson)
 
 # 1. Pre-requisites
 
@@ -520,7 +522,13 @@ This results in the following setting in `.vscode/settings.json`:
 }
 ```
 
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
 # Extra notes
+
+## USB Connection & Upgrade ST Link firmware
 
 Installing STM32 Extension and running `Upgrade ST Link firmware` in the
 extension tab results in:
@@ -670,4 +678,56 @@ provided rules, which can be overwritten by e.g. updates
 
 ```shell
 /lib/udev/rules.d/
+```
+
+<div align="right">
+  <a href="#table-of-contents">Back to TOC</a>
+</div>
+
+## Debug setup - `launch.json`
+
+While researching, the **STM32 VS Code Extension** only supports `cmake`.
+Meanwhile researching the setup of `make` as build system, it seems like most
+setups use `openocd` or `jlink`.
+
+Here is a setup which utilizes the `stlink` gdb server.
+
+**launch.json**
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ST-Link: Launch Debug Application",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/wb55_nucleo.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink",
+            "serverpath": "/opt/st/stm32cubeclt_1.16.0/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt_1.16.0/STM32CubeProgrammer/bin/",
+            "armToolchainPath": "/opt/st/stm32cubeclt_1.16.0/GNU-tools-for-STM32/bin",
+            "interface": "swd",
+            "device": "STM32WB55RG",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "raw",
+        },
+        {
+            "name": "ST-Link: Attach To Running Debug Application",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/wb55_nucleo.elf",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "stlink",
+            "serverpath": "/opt/st/stm32cubeclt_1.16.0/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt_1.16.0/STM32CubeProgrammer/bin/",
+            "armToolchainPath": "/opt/st/stm32cubeclt_1.16.0/GNU-tools-for-STM32/bin",
+            "interface": "swd",
+            "device": "STM32WB55RG",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "raw",
+        }
+    ]
+}
 ```
